@@ -1,11 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dashboard } from "@/components/Dashboard";
 import { Reports } from "@/components/Reports";
 import { Toaster } from "@/components/ui/sonner";
 import { LayoutDashboard, ListRestart } from "lucide-react";
+import { toast } from "sonner";
+import { openUrl } from "@tauri-apps/plugin-opener";
+import { checkForUpdate } from "@/lib/updates";
 
 function App() {
   const [activeTab, setActiveTab] = useState<"dashboard" | "reports">("dashboard");
+
+  useEffect(() => {
+    checkForUpdate()
+      .then((update) => {
+        if (!update) return;
+        toast.info(`Nova versão ${update.version} disponível`, {
+          description: "Abra o GitHub para baixar o novo APK.",
+          duration: Infinity,
+          action: {
+            label: "Abrir",
+            onClick: () => openUrl(update.url),
+          },
+        });
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
