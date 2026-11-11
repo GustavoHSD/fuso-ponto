@@ -22,5 +22,6 @@ export const api = {
   getActiveSession: () => invoke<TimeEntry | null>("get_active_session"),
   getTodaySummary: () => invoke<DailySummary>("get_today_summary"),
   getReports: () => invoke<Report[]>("get_reports"),
+  getTodayEntries: () => invoke<TimeEntry[]>("get_today_entries"),
   exportData: () => invoke<string>("export_data"),
 };

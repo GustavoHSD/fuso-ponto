@@ -110,4 +110,13 @@ impl TimeEntryRepository for SqliteTimeEntryRepository {
 
         Ok(entries)
     }
+
+    async fn get_today_entries(&self) -> Result<Vec<TimeEntry>> {
+        let entries = sqlx::query_as::<_, TimeEntry>("SELECT id, start_time, end_time FROM time_entries WHERE date(start_time) = date('now') ORDER BY start_time DESC")
+            .fetch_all(&self.pool)
+            .await
+            .map_err(|e| e.to_string())?;
+
+        Ok(entries)
+    }
 }

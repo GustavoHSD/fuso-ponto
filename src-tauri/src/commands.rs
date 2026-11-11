@@ -35,6 +35,11 @@ pub async fn get_reports(repo: State<'_, AppRepo>) -> Result<Vec<Report>, String
 }
 
 #[tauri::command]
+pub async fn get_today_entries(repo: State<'_, AppRepo>) -> Result<Vec<TimeEntry>, String> {
+    repo.get_today_entries().await
+}
+
+#[tauri::command]
 pub async fn export_data(app: AppHandle, repo: State<'_, AppRepo>) -> Result<String, String> {
     let entries = repo.get_all_entries().await?;
     

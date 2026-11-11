@@ -11,4 +11,5 @@ pub trait TimeEntryRepository: Send + Sync {
     async fn get_today_summary(&self) -> Result<DailySummary>;
     async fn get_all_reports(&self) -> Result<Vec<Report>>;
     async fn get_all_entries(&self) -> Result<Vec<TimeEntry>>;
+    async fn get_today_entries(&self) -> Result<Vec<TimeEntry>>;
 }

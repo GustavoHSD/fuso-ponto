@@ -8,13 +8,13 @@ function App() {
   const [activeTab, setActiveTab] = useState<"dashboard" | "reports">("dashboard");
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
-      <header className="sticky top-0 z-50 p-4 pt-safe border-b flex justify-between items-center bg-card/80 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <img src="/fuso-ferrementas-logo.jpg" alt="Fuso" className="h-16 w-auto rounded-md" />
-          <h1 className="text-2xl font-bold tracking-tight">Ponto</h1>
+    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
+      <header className="sticky top-0 z-50 px-4 py-3 border-b flex justify-between items-center bg-card/80 backdrop-blur-md pt-safe">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink">
+          <img src="/fuso-ferrementas-logo.jpg" alt="Fuso" className="h-10 sm:h-14 w-auto rounded-md flex-shrink-0" />
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight truncate">Ponto</h1>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2 flex-shrink-0">
           <button
             onClick={() => setActiveTab("dashboard")}
             title="Painel"
@@ -22,7 +22,7 @@ function App() {
               activeTab === "dashboard" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent/50"
             }`}
           >
-            <LayoutDashboard className="w-6 h-6" />
+            <LayoutDashboard className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
           <button
             onClick={() => setActiveTab("reports")}
@@ -31,7 +31,7 @@ function App() {
               activeTab === "reports" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent/50"
             }`}
           >
-            <ListRestart className="w-6 h-6" />
+            <ListRestart className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
       </header>
@@ -40,9 +40,9 @@ function App() {
         {activeTab === "dashboard" ? <Dashboard /> : <Reports />}
       </main>
 
-      <footer className="sticky bottom-0 z-50 p-4 pb-safe border-t flex justify-center items-center gap-3 bg-background/80 backdrop-blur-md">
+      <footer className="sticky bottom-0 z-50 px-4 py-3 border-t flex justify-center items-center gap-3 bg-background/80 backdrop-blur-md pb-safe">
         <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Fuso Ponto</span>
-        <img src="/fuso-ferrementas-logo.jpg" alt="Fuso" className="h-4 w-auto rounded-sm opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+        <img src="/fuso-ferrementas-logo.jpg" alt="Fuso" className="h-4 w-auto rounded-sm opacity-60 grayscale" />
       </footer>
 
       <Toaster />
