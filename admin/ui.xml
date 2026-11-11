@@ -1,0 +1,12 @@
+<Window Title="Ponto Admin" Width="440" Height="420">
+    <VBox Spacing="10" Slot.Padding="16">
+        <Button Text="Gerar par de chaves" OnClicked="app.keygen"/>
+        <Label Name="pubkey" Text="(sem chaves — gere o par)" Selectable="true"/>
+        <Label Text="ID do dispositivo (copiado do app do funcionário):"/>
+        <TextInput Name="device" Placeholder="ID do dispositivo"/>
+        <Label Text="Pago até (data):"/>
+        <TextInput Name="until" Placeholder="AAAA-MM-DD"/>
+        <Button Text="Assinar e salvar…" Style="Primary" OnClicked="app.sign"/>
+        <Label Name="status" Text=""/>
+    </VBox>
+</Window>

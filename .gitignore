@@ -12,6 +12,15 @@ dist
 dist-ssr
 *.local
 
+# Rust build artifacts
+/target
+src-tauri/target
+paid-core/target
+admin/target
+
+# Vendored Raven GUI library (clone it: git clone https://github.com/oscar-soirey/Raven admin/Raven)
+admin/Raven/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

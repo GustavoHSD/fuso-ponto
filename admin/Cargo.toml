@@ -1,0 +1,11 @@
+[package]
+name = "ponto-admin"
+version = "0.1.0"
+edition = "2021"
+description = "Admin GUI: gera o comprovante de pagamento assinado (paid until) para um dispositivo Ponto"
+
+[dependencies]
+raven = { package = "raven-gui", path = "Raven/bindings/rust" }
+paid-core = { path = "../paid-core" }
+rfd = "0.15"
+serde_json = "1"

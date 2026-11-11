@@ -1,0 +1,3 @@
+# Links the raven-gui binding against the shared library built from admin/Raven.
+[env]
+RAVEN_LIB_DIR = { relative = true, value = "admin/Raven/build" }

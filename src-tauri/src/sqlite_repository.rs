@@ -119,4 +119,28 @@ impl TimeEntryRepository for SqliteTimeEntryRepository {
 
         Ok(entries)
     }
+
+    async fn get_setting(&self, key: &str) -> Result<Option<String>> {
+        let row = sqlx::query("SELECT value FROM settings WHERE key = ?")
+            .bind(key)
+            .fetch_optional(&self.pool)
+            .await
+            .map_err(|e| e.to_string())?;
+
+        match row {
+            Some(row) => Ok(Some(row.try_get("value").map_err(|e| e.to_string())?)),
+            None => Ok(None),
+        }
+    }
+
+    async fn set_setting(&self, key: &str, value: &str) -> Result<()> {
+        sqlx::query("INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value")
+            .bind(key)
+            .bind(value)
+            .execute(&self.pool)
+            .await
+            .map_err(|e| e.to_string())?;
+
+        Ok(())
+    }
 }

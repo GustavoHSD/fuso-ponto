@@ -24,4 +24,7 @@ export const api = {
   getReports: () => invoke<Report[]>("get_reports"),
   getTodayEntries: () => invoke<TimeEntry[]>("get_today_entries"),
   exportData: () => invoke<string>("export_data"),
+  getDeviceId: () => invoke<string>("get_device_id"),
+  getPaidUpTo: () => invoke<string | null>("get_paid_up_to"),
+  importPaidFile: (path: string) => invoke<string>("import_paid_file", { path }),
 };

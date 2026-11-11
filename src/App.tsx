@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Dashboard } from "@/components/Dashboard";
 import { Reports } from "@/components/Reports";
+import { Settings } from "@/components/Settings";
 import { Toaster } from "@/components/ui/sonner";
-import { LayoutDashboard, ListRestart } from "lucide-react";
+import { LayoutDashboard, ListRestart, Settings as SettingsIcon } from "lucide-react";
 
 function App() {
-  const [activeTab, setActiveTab] = useState<"dashboard" | "reports">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "reports" | "settings">("dashboard");
 
   return (
     <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
@@ -33,11 +34,20 @@ function App() {
           >
             <ListRestart className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
+          <button
+            onClick={() => setActiveTab("settings")}
+            title="Ajustes"
+            className={`p-2 rounded-md transition-colors ${
+              activeTab === "settings" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent/50"
+            }`}
+          >
+            <SettingsIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
         </div>
       </header>
 
       <main className="flex-1 overflow-y-auto">
-        {activeTab === "dashboard" ? <Dashboard /> : <Reports />}
+        {activeTab === "dashboard" ? <Dashboard /> : activeTab === "reports" ? <Reports /> : <Settings />}
       </main>
 
       <footer className="sticky bottom-0 z-50 px-4 py-3 border-t flex justify-center items-center gap-3 bg-background/80 backdrop-blur-md pb-safe">

@@ -2,6 +2,9 @@ use tauri::State;
 use crate::models::{TimeEntry, DailySummary, Report};
 use crate::repository::TimeEntryRepository;
 use crate::sqlite_repository::SqliteTimeEntryRepository;
+use paid_core::PaidFile;
+
+pub const PAID_PUBLIC_KEY: &str = include_str!("../paid_public_key.txt");
 use rust_xlsxwriter::Workbook;
 use std::sync::Arc;
 use tauri::AppHandle;
@@ -37,6 +40,51 @@ pub async fn get_reports(repo: State<'_, AppRepo>) -> Result<Vec<Report>, String
 #[tauri::command]
 pub async fn get_today_entries(repo: State<'_, AppRepo>) -> Result<Vec<TimeEntry>, String> {
     repo.get_today_entries().await
+}
+
+async fn ensure_device_id(repo: &AppRepo) -> Result<String, String> {
+    if let Some(id) = repo.get_setting("device_id").await? {
+        return Ok(id);
+    }
+    let id = uuid::Uuid::new_v4().to_string();
+    repo.set_setting("device_id", &id).await?;
+    Ok(id)
+}
+
+#[tauri::command]
+pub async fn get_device_id(repo: State<'_, AppRepo>) -> Result<String, String> {
+    ensure_device_id(&repo).await
+}
+
+#[tauri::command]
+pub async fn get_paid_up_to(repo: State<'_, AppRepo>) -> Result<Option<String>, String> {
+    repo.get_setting("paid_up_to").await
+}
+
+#[tauri::command]
+pub async fn import_paid_file(repo: State<'_, AppRepo>, path: String) -> Result<String, String> {
+    let content = std::fs::read_to_string(&path)
+        .map_err(|_| "Não foi possível ler o arquivo".to_string())?;
+    let file: PaidFile =
+        serde_json::from_str(&content).map_err(|_| "Arquivo inválido".to_string())?;
+
+    paid_core::verify(PAID_PUBLIC_KEY.trim(), &file)?;
+
+    let device_id = ensure_device_id(&repo).await?;
+    if file.device != device_id {
+        return Err("Este comprovante é para outro dispositivo".to_string());
+    }
+
+    // An older file can never roll the status back
+    let current = repo.get_setting("paid_up_to").await?.unwrap_or_default();
+    let new_value = if file.paid_up_to > current {
+        file.paid_up_to.clone()
+    } else {
+        current
+    };
+    repo.set_setting("paid_up_to", &new_value).await?;
+
+    Ok(new_value)
 }
 
 #[tauri::command]

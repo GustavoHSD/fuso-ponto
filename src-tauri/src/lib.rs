@@ -13,6 +13,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_sharekit::init())
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_sql::Builder::default().build())
         .setup(|app| {
             let app_handle = app.handle().clone();
@@ -49,6 +50,14 @@ pub fn run() {
                 .await
                 .expect("failed to run initial migration");
 
+                sqlx::query("CREATE TABLE IF NOT EXISTS settings (
+                    key TEXT PRIMARY KEY,
+                    value TEXT NOT NULL
+                );")
+                .execute(&pool)
+                .await
+                .expect("failed to run settings migration");
+
                 let repo = Arc::new(SqliteTimeEntryRepository::new(pool));
                 app_handle.manage(repo);
             });
@@ -62,6 +71,9 @@ pub fn run() {
             commands::get_today_summary,
             commands::get_reports,
             commands::get_today_entries,
+            commands::get_device_id,
+            commands::get_paid_up_to,
+            commands::import_paid_file,
             commands::export_data
         ])
         .run(tauri::generate_context!())

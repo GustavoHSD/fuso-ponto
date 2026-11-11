@@ -5,6 +5,9 @@ description = "A Tauri App"
 authors = ["you"]
 edition = "2021"
 
+# Standalone workspace: not a member of the root workspace (paid-core/admin)
+[workspace]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
@@ -28,4 +31,7 @@ chrono = { version = "0.4.44", features = ["serde"] }
 rust_xlsxwriter = { version = "0.95.0", features = ["chrono"] }
 async-trait = "0.1.89"
 sqlx = { version = "0.8.6", features = ["sqlite", "runtime-tokio", "chrono"] }
+paid-core = { path = "../paid-core" }
+tauri-plugin-dialog = "2"
+uuid = { version = "1", features = ["v4"] }
 

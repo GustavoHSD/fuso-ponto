@@ -1,0 +1,3 @@
+[workspace]
+members = ["paid-core", "admin"]
+resolver = "2"

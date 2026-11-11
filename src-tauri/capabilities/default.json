@@ -6,6 +6,7 @@
   "permissions": [
     "core:default",
     "opener:default",
-    "sharekit:default"
+    "sharekit:default",
+    "dialog:default"
   ]
 }
