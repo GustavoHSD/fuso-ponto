@@ -9,7 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Share2 } from "lucide-react";
+import { shareFile } from "@choochmeque/tauri-plugin-sharekit-api";
 import { toast } from "sonner";
 
 export function Reports() {
@@ -27,9 +28,11 @@ export function Reports() {
   const handleExport = async () => {
     try {
       const path = await api.exportData();
-      toast.success("Dados exportados com sucesso!", {
-        description: `Salvo em: ${path}`,
+      await shareFile(`file://${path}`, {
+        mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        title: "ponto_export.xlsx",
       });
+      toast.success("Planilha pronta para compartilhar!");
     } catch (err) {
       console.error("Export failed", err);
       toast.error("Falha na exportação");
@@ -47,7 +50,7 @@ export function Reports() {
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">Relatórios Diários</h2>
         <Button onClick={handleExport} variant="outline" size="sm">
-          <Download className="w-4 h-4 mr-2" /> Exportar
+          <Share2 className="w-4 h-4 mr-2" /> Compartilhar
         </Button>
       </div>
 
